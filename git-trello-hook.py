@@ -6,6 +6,7 @@ from bottle import route, request,run, default_app
 from trello import Cards, Lists
 import re
 import json
+import os
 
 def get_args():
     defaults = {
@@ -20,12 +21,12 @@ def get_args():
     parser.add_argument('-k', '--api-key',
                         type=str,
                         help='Trello API Key',
-                        required=True,
+                        default=os.environ.get('API_KEY'),
                         dest='api_key')
     parser.add_argument('-t', '--oauth-token',
                         type=str,
                         help='Trello Oauth token (see readme.md for more info)',
-                        required=True,
+                        default=os.environ.get('OAUTH_TOKEN'),
                         dest='oauth_token')
     parser.add_argument('-l', '--listen-on',
                         type=str,
@@ -71,7 +72,6 @@ def handle_payload():
             for card in cards_in_commit:
                 comment = '{0}\n{1}'.format(
                     commit['message'].replace('['+card+']', ''), commit['url'])
-                print('!!!%s!!!' % card)
                 TRELLO_CARDS.new_action_comment(card, comment)
 
     return "done"

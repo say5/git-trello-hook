@@ -2,4 +2,5 @@
 
 . ./.env
 
-./git-trello-hook.py -k $API_KEY -t $OAUTH_TOKEN
+./git-trello-hook.py
+
