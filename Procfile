@@ -1,1 +1,1 @@
-web: gunicorn git-trello-hook:app
+web: python git-trello-hook.py

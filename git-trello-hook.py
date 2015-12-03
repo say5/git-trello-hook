@@ -36,14 +36,14 @@ def get_args():
     parser.add_argument('-p', '--port',
                         type=int,
                         help='Bind to port',
-                        default=defaults['listen-port'],
+                        default=int(os.environ.get("PORT", defaults['listen-port'])),
                         dest='listen_port')
     return parser.parse_args()
 
 
 @route("/")
 def index():
-    return 'git webhook to comment on Trello cards' + os.environ.get('OAUTH_TOKEN')
+    return 'git webhook to comment on Trello cards' + os.environ.get('API_KEY')
 
 
 @route("/webhook", method='POST')
