@@ -2,10 +2,14 @@
 FROM python:2.7
 MAINTAINER Alexander Svyrydov
 
-ADD . /git-trello-hook
+ADD . /git2trello
 
-WORKDIR /git-trello-hook
+WORKDIR /git2trello
 
-RUN pip install -r requirements.txt
+RUN rm -f .env && pip install -r requirements.txt
 
-CMD ./start.sh
+EXPOSE 7575
+
+ENV PORT 7575
+
+CMD ./git2trello.py

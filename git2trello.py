@@ -31,7 +31,7 @@ def get_args():
     parser.add_argument('-l', '--listen-on',
                         type=str,
                         help='Interface to listen on',
-                        default=defaults['listen-iface'],
+                        default=os.environ.get("IFACE", defaults['listen-iface']),
                         dest='listen_iface')
     parser.add_argument('-p', '--port',
                         type=int,

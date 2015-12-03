@@ -1,1 +1,1 @@
-web: python git-trello-hook.py
+web: python git2trello.py

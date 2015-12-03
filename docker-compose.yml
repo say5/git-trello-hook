@@ -1,0 +1,6 @@
+git2trello:
+  build: .
+  ports:
+   - "7575:7575"
+  env_file: .env
+
