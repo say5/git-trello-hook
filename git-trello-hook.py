@@ -43,7 +43,7 @@ def get_args():
 
 @route("/")
 def index():
-    return 'git webhook to comment on Trello cards'
+    return 'git webhook to comment on Trello cards' + os.environ.get('OAUTH_TOKEN')
 
 
 @route("/webhook", method='POST')
