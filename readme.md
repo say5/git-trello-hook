@@ -4,7 +4,7 @@ A github/gitlab webhook script written in python and based on [git-trello-hook](
 ##Objective
 
 In git's commit add [CARDID] string (where CARDID - your Trello card's id, 8 symbols), 
-in corresponding Trello card a comment will be addedd with text message and url to git comment.
+in corresponding Trello card a comment will be added with text message and url to git comment.
 
 ##Configuration
 
@@ -21,7 +21,7 @@ By default script will bind port 7575 on all interfaces, it can be changed - see
 ###Docker
 Update `.env` file, then:
 
-        dcoker build -t git-trello-hook .
+        docker build -t git-trello-hook .
         docker run -d -p 7575:7575 git-trello-hook
 
 ###Heroku
