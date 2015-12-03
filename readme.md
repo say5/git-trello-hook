@@ -1,32 +1,33 @@
 # git-trello-hook
-A github/gitlab webhook script written by python inspired by ruby gem [git-trello](https://github.com/zmilojko/git-trello).
+A github/gitlab webhook script written in python and based on [git-trello-hook](https://github.com/hewigovens/git-trello-hook).
 
-#Instructions
+##Objective
 
-    $pip -r requirements.txt
+In git's commit add [CARDID] string (where CARDID - your Trello card's id, 8 symbols), 
+in corresponding Trello card a comment will be addedd with text message and url to git comment.
 
-    # Update these placeholders in git-trello-hook.py
-    TRELLO_CONFIG = {
-        'api_key': 'TRELLO_API_KEY',
-        'oauth_token': 'TRELLO_OAUTH_TOKEN_FOR_BOARD',
-        'board_id': 'BOARD_ID',
-        'list_id_in_progress': 'LIST_ID',
-        'list_id_done': 'LIST_ID',
-    }
+##Configuration
 
-    WEBHOOK_CONFIG = {
-        'host': '0.0.0.0',
-        'port': 7343
-    }
+###Script
+Just pust lines in file `.env`:
 
-    # Open your github/gitlab repo settings, add an webhook URL according to your configs.
-    e.g. For heroku deployment, add url https://git-trello-test.herokuapp.com/webhook
-    e.g. For self hosting, add url https://your-ip-address:port/webhook
+        API_KEY='TRELLO_API_KEY'
+        OAUTH_TOKEN='TRELLO_OAUTH_TOKEN_FOR_BOARD'
+        
+And run ./start.sh
 
-    $git commit -a -m "Fix [card #1]"
-    $git push
+By default script will bind port 7575 on all interfaces, it can be changed - see help.
 
-    # git-trello will move Card #1(View Card, Card index is on the right bottom corner) from `list_id_in_progress` to `list_id_done` and append with your git commit url.
+###Docker
+Update `.env` file, then:
+
+        dcoker build -t git-trello-hook .
+        docker run -d -p 7575:7575 git-trello-hook
+
+###Heroku
+Add configuration variables API_KEY and OAUTH_TOKEN
+
+## Trello integration
 
 ###`API_KEY`
 https://trello.com/1/appKey/generate
@@ -42,26 +43,7 @@ https://trello.com/b/XLvlTFVA/git-trello
 
 then you should type in "git-trello".
 
-
-###`TRELLO_BOARD_ID`
-It is the end of the URL when viewing the board. For example, for https://trello.com/b/XLvlTFVA/git-trello, board_id is XLvlTFVA.
-
-###`LIST_ID_IN_PROGRESS and LIST_ID_IN_DONE`
-List IDs seem to be a (board id + list index), where all are treated as hex numbers. However, this is undocumented.
-
-Safe way to find a list ID is to open a card from the list, click the More link in the bottom-right corner, select Export JSON and find the idList.
-
-Post receive will move all referenced cards to the LIST_ID_IN_PROGRESS, unless they are referenced by Close or Fix word, in which case it will move them to the LIST_ID_IN_DONE.
-
-#Examples
-
-Example [Trello board](https://trello.com/b/Yl6AN4Pj/git-trello-test)
-Example [git repo](https://github.com/hewigovens/git-trello-test)
-
-#TODOs
-* easy configuration
-* easy deployment
-
 #Credits
 
 [git-trello](https://github.com/zmilojko/git-trello)
+[git-trello-hook](https://github.com/hewigovens/git-trello-hook)
