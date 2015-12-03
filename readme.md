@@ -51,5 +51,5 @@ then you should type in "git-trello".
 
 #Credits
 
-[git-trello](https://github.com/zmilojko/git-trello)
-[git-trello-hook](https://github.com/hewigovens/git-trello-hook)
+* [git-trello](https://github.com/zmilojko/git-trello)
+* [git-trello-hook](https://github.com/hewigovens/git-trello-hook)
