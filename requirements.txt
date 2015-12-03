@@ -2,4 +2,3 @@ argparse
 trello
 gevent
 bottle
-gunicorn
