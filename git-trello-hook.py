@@ -1,31 +1,48 @@
 #!/usr/bin/env python
 
+import argparse
 from gevent import monkey;monkey.patch_all()
 from bottle import route, request,run, default_app
 from trello import Cards, Lists
 import re
 import json
 
-TRELLO_CONFIG = {
-    'api_key': 'TRELLO_API_KEY',
-    'oauth_token': 'TRELLO_OAUTH_TOKEN_FOR_BOARD',
-    'board_id': 'BOARD_ID',
-    'list_id_in_progress': 'LIST_ID',
-    'list_id_done': 'LIST_ID',
-}
+def get_args():
+    defaults = {
+        'listen-iface': '0.0.0.0',
+        'listen-port': 7575,
+    }
 
-WEBHOOK_CONFIG = {
-    'host': '0.0.0.0',
-    'port': 7343
-}
-
-TRELLO_LIST = Lists(TRELLO_CONFIG['api_key'], TRELLO_CONFIG['oauth_token'])
-TRELLO_CARDS = Cards(TRELLO_CONFIG['api_key'], TRELLO_CONFIG['oauth_token'])
+    description = 'Trello Git integration'
+    formatter_class = argparse.RawDescriptionHelpFormatter
+    parser = argparse.ArgumentParser(description=description,
+                                     formatter_class=formatter_class)
+    parser.add_argument('-k', '--api-key',
+                        type=str,
+                        help='Trello API Key',
+                        required=True,
+                        dest='api_key')
+    parser.add_argument('-t', '--oauth-token',
+                        type=str,
+                        help='Trello Oauth token (see readme.md for more info)',
+                        required=True,
+                        dest='oauth_token')
+    parser.add_argument('-l', '--listen-on',
+                        type=str,
+                        help='Interface to listen on',
+                        default=defaults['listen-iface'],
+                        dest='listen_iface')
+    parser.add_argument('-p', '--port',
+                        type=int,
+                        help='Bind to port',
+                        default=defaults['listen-port'],
+                        dest='listen_port')
+    return parser.parse_args()
 
 
 @route("/")
 def index():
-    return 'git webhook for move trello cards'
+    return 'git webhook to comment on Trello cards'
 
 
 @route("/webhook", method='POST')
@@ -42,34 +59,33 @@ def handle_payload():
     commits = json_payload['commits']
     cards_in_commit = []
     cards_url_dict = {}
-    card_pattern = '(\[)(card #)([0-9]+)(\])'
+    card_pattern = '\[([a-z0-9]{8})\]'
 
     for commit in commits:
+        cards_in_commit[:] = []
         results = re.findall(
             card_pattern, commit['message'], flags=re.IGNORECASE)
         for result in results:
-            cards_in_commit.append(result[2])
-            cards_url_dict[result[2]] = commit['url']
-
-    print(cards_in_commit)
-    print(cards_url_dict)
-    if cards_in_commit:
-        from_cards = TRELLO_LIST.get_card(
-            TRELLO_CONFIG['list_id_in_progress'])
-
-        for card in from_cards:
-            print(card)
-            if str(card['idShort']) in cards_in_commit:
-                desc_with_commit = '{0}\n{1}'.format(
-                    card['desc'], cards_url_dict[str(card['idShort'])])
-
-                TRELLO_CARDS.update(
-                    card['id'], desc=desc_with_commit, idList=TRELLO_CONFIG['list_id_done'])
+            cards_in_commit.append(result)
+        if cards_in_commit:
+            for card in cards_in_commit:
+                comment = '{0}\n{1}'.format(
+                    commit['message'].replace('['+card+']', ''), commit['url'])
+                print('!!!%s!!!' % card)
+                TRELLO_CARDS.new_action_comment(card, comment)
 
     return "done"
 
+
+def main():
+    args = get_args()
+    global TRELLO_CARDS
+    TRELLO_CARDS = Cards(args.api_key, args.oauth_token)
+    run(host=args.listen_iface, port=args.listen_port, server='gevent', debug=True)
+
+
 if __name__ == '__main__':
-    run(host=WEBHOOK_CONFIG['host'],
-               port=WEBHOOK_CONFIG['port'], server='gevent', debug=True)
+    main()
+
 
 app = default_app()
