@@ -1,4 +1,5 @@
-# git-trello-hook
+# git2trelo
+
 A github/gitlab webhook script written in python and based on [git-trello-hook](https://github.com/hewigovens/git-trello-hook).
 
 ##Objective
@@ -21,8 +22,13 @@ By default script will bind port 7575 on all interfaces, it can be changed - see
 ###Docker
 Update `.env` file, then:
 
-        docker build -t git-trello-hook .
-        docker run -d -p 7575:7575 git-trello-hook
+        docker build -t git2trello .
+        docker run -d -P --env-file=.env git2trello
+
+###Docker-compose
+Update `.env` file, then:
+
+        docker-compose up
 
 ###Heroku
 Add configuration variables API_KEY and OAUTH_TOKEN
