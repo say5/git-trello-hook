@@ -49,6 +49,10 @@ https://trello.com/b/XLvlTFVA/git-trello
 
 then you should type in "git-trello".
 
+## Git integration
+
+Configure webhook with /webhook URL, for example if your app is runnning on IP 123.45.67.89: `http://123.45.67.89:7575/webhook`
+
 #Credits
 
 * [git-trello](https://github.com/zmilojko/git-trello)
