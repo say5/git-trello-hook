@@ -5,7 +5,7 @@ A github/gitlab webhook script written in python and based on [git-trello-hook](
 ##Objective
 
 In git's commit add [CARDID] string (where CARDID - your Trello's Card ID, 8 symbols), 
-in corresponding Trello card a comment will be added with text message and url to git comment.
+in corresponding Trello card a comment will be added with text message and url to git commit.
 
 ##Configuration
 
