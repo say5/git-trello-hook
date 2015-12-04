@@ -1,4 +1,4 @@
-# git2trelo
+# git2trello
 
 A github/gitlab webhook script written in python and based on [git-trello-hook](https://github.com/hewigovens/git-trello-hook).
 
