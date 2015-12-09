@@ -1,10 +1,11 @@
-# git-trello-hook
+# git2trello
+
 A github/gitlab webhook script written in python and based on [git-trello-hook](https://github.com/hewigovens/git-trello-hook).
 
 ##Objective
 
-In git's commit add [CARDID] string (where CARDID - your Trello card's id, 8 symbols), 
-in corresponding Trello card a comment will be added with text message and url to git comment.
+In git's commit add [CARDID] string (where CARDID - your Trello's Card ID, 8 symbols), 
+in corresponding Trello card a comment will be added with text message and url to git commit.
 
 ##Configuration
 
@@ -21,8 +22,13 @@ By default script will bind port 7575 on all interfaces, it can be changed - see
 ###Docker
 Update `.env` file, then:
 
-        docker build -t git-trello-hook .
-        docker run -d -p 7575:7575 git-trello-hook
+        docker build -t git2trello .
+        docker run -d -P --env-file=.env git2trello
+
+###Docker-compose
+Update `.env` file, then:
+
+        docker-compose up
 
 ###Heroku
 Add configuration variables API_KEY and OAUTH_TOKEN
@@ -43,7 +49,11 @@ https://trello.com/b/XLvlTFVA/git-trello
 
 then you should type in "git-trello".
 
+## Git integration
+
+Configure webhook with /webhook URL, for example if your app is runnning on IP 123.45.67.89: `http://123.45.67.89:7575/webhook`
+
 #Credits
 
-[git-trello](https://github.com/zmilojko/git-trello)
-[git-trello-hook](https://github.com/hewigovens/git-trello-hook)
+* [git-trello](https://github.com/zmilojko/git-trello)
+* [git-trello-hook](https://github.com/hewigovens/git-trello-hook)
