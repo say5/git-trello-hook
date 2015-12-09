@@ -57,6 +57,8 @@ def handle_payload():
         body = request.forms['payload']
         json_payload = json.loads(body)
     print(json_payload)
+    if 'commits' not in json_payload['commits']:
+        return "done"
     commits = json_payload['commits']
     cards_in_commit = []
     cards_url_dict = {}
