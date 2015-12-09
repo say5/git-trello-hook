@@ -14,7 +14,7 @@ def get_args():
         'listen-port': 7575,
     }
 
-    description = 'Trello Git integration'
+    description = 'Trello2Git integration'
     formatter_class = argparse.RawDescriptionHelpFormatter
     parser = argparse.ArgumentParser(description=description,
                                      formatter_class=formatter_class)
